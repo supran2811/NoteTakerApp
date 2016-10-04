@@ -1,18 +1,12 @@
 import React from 'react';
 
-class NoteList extends React.Component{
-
-    render(){
-          var notes = this.props.notes.map(function(note , index){
-                return <li className = "list-group-item" key = {index} > {note['.value']}  </li>
-            });
-
-        
-
+const NoteList = ({notes}) => {
+    
         return(
-            <div className = "list-group">{notes}</div>
+            <div className = "list-group">
+                {notes.map( (note , index) => (<li className = "list-group-item" key = {index} > {note['.value']}  </li>))}
+            </div>
         )
-    }
 }
 
-module.exports = NoteList;
+export default NoteList;

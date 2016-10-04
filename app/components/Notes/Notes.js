@@ -18,4 +18,4 @@ class Notes extends React.Component{
 
 }
 
-module.exports = Notes;
+export default Notes;

@@ -5,9 +5,9 @@ import Home from "../components/Home";
 import Profile from "../components/Profile";
 // var Route = ReactRouter.Route;
 
-module.exports = (
+export default (
  <Route path="/"   component = {Main}  >
-        <Route path = "profile/:username" component = {Profile}/>
+        <Route path = "/profile/:username" component = {Profile}/>
         <IndexRoute component={Home}/>
  </Route>
 )

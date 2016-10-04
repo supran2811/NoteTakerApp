@@ -5,13 +5,12 @@ import Notes from "./Notes/Notes";
 import ReactFireBase from "reactfire"
 import  FireBase from "firebase";
 import Mixins from 'es6-mixins';
+import getGitHubInfo from '../utils/Helpers'
 
 class Profile extends React.Component {
 
-
-
     constructor(){
-        super();
+       super();     
         this.state = {
 
                 bio : { name : "Jake"} , 
@@ -21,7 +20,7 @@ class Profile extends React.Component {
         }
 
         Mixins([ReactFireBase],this);
-        this.handleAddNewNote = this.handleAddNewNote.bind(this);
+        
     }
    
     componentDidMount(){
@@ -36,14 +35,28 @@ class Profile extends React.Component {
         };
         FireBase.initializeApp(config);
        // console.log(this.props.params.username);
-        this.ref = FireBase.database().ref(this.props.params.username);//this.ref.child(this.props.params.username);
+        this.init(this.props.params.username);
+            
+    }
+
+    componentWillReceiveProps(nextProps){
+       
+       console.log(nextProps);
+       this.unbind("notes");
+
+       this.init(nextProps.params.username);     
+    }
+    
+    init(username){
+        this.ref = FireBase.database().ref(username);//this.ref.child(this.props.params.username);
        // console.log(childRef.toString());
         this.bindAsArray(this.ref , "notes" , function(error){
                 console.log(error);
         });
 
+        getGitHubInfo(username).then((data) =>  (this.setState({bio : data.bio,repos : data.repos})));
+
     }
-   
 
    componentWillUnmount(){
 
@@ -68,7 +81,7 @@ class Profile extends React.Component {
                      <Repos username = {this.props.params.username} repos = {this.state.repos} />
                 </div>
                 <div className = "col-md-4">
-                     <Notes username = {this.props.params.username} notes = {this.state.notes} addNote = {this.handleAddNewNote} />
+                     <Notes username = {this.props.params.username} notes = {this.state.notes} addNote = {(newNote) => this.handleAddNewNote(newNote)} />
                 </div>
 
 
@@ -78,4 +91,4 @@ class Profile extends React.Component {
 }
 
 
-module.exports = Profile;
+export default Profile;
